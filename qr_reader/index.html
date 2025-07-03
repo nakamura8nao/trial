@@ -25,10 +25,7 @@
     }
   </style>
   <script type="module">
-    import {
-      BrowserQRCodeReader,
-      NotFoundException,
-    } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@latest/+esm';
+    import { BrowserQRCodeReader } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@0.0.10/+esm';
 
     const codeReader = new BrowserQRCodeReader();
 
@@ -36,16 +33,19 @@
       const video = document.getElementById('video');
       const result = document.getElementById('result');
 
-      console.log("🔍 QRコードリーダー初期化中…");
+      console.log("📷 QRコードリーダー初期化中...");
 
       codeReader.decodeFromVideoDevice(null, video, (res, err) => {
         if (res) {
           console.log("✅ 読み取り成功:", res.getText());
           result.textContent = "✅ QRコード: " + res.getText();
         }
-        if (err && !(err instanceof NotFoundException)) {
-          console.error("エラー:", err);
-          result.textContent = "❌ カメラエラー: " + err;
+        if (err) {
+          // QRコードが見つからないだけならスルー
+          if (err.message && err.message.indexOf("No MultiFormat Readers were able to detect the code") === -1) {
+            console.error("❌ カメラエラー:", err);
+            result.textContent = "❌ カメラエラー: " + err.message;
+          }
         }
       });
     });
