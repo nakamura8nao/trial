@@ -25,7 +25,10 @@
     }
   </style>
   <script type="module">
-    import { BrowserQRCodeReader, NotFoundException } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@latest/+esm';
+    import {
+      BrowserQRCodeReader,
+      NotFoundException,
+    } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@latest/+esm';
 
     const codeReader = new BrowserQRCodeReader();
 
@@ -42,6 +45,7 @@
         }
         if (err && !(err instanceof NotFoundException)) {
           console.error("エラー:", err);
+          result.textContent = "❌ カメラエラー: " + err;
         }
       });
     });
