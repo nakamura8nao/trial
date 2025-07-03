@@ -7,26 +7,21 @@
   <style>
     body {
       margin: 0;
-      padding: 0;
       background: #000;
       color: #fff;
       font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      text-align: center;
     }
 
     video {
       width: 100vw;
       height: auto;
-      max-height: 100vh;
       object-fit: cover;
     }
 
     p {
-      margin: 1em;
       font-size: 1.2em;
-      text-align: center;
+      margin: 1em 0;
     }
   </style>
   <script type="module">
@@ -35,15 +30,18 @@
     const codeReader = new BrowserQRCodeReader();
 
     window.addEventListener('DOMContentLoaded', () => {
-      const videoElement = document.getElementById('video');
-      const resultElement = document.getElementById('result');
+      const video = document.getElementById('video');
+      const result = document.getElementById('result');
 
-      codeReader.decodeFromVideoDevice(null, videoElement, (result, err) => {
-        if (result) {
-          resultElement.textContent = `✅ 読み取り結果: ${result.getText()}`;
+      console.log("🔍 QRコードリーダー初期化中…");
+
+      codeReader.decodeFromVideoDevice(null, video, (res, err) => {
+        if (res) {
+          console.log("✅ 読み取り成功:", res.getText());
+          result.textContent = "✅ QRコード: " + res.getText();
         }
         if (err && !(err instanceof NotFoundException)) {
-          console.error('QR読み取りエラー:', err);
+          console.error("エラー:", err);
         }
       });
     });
@@ -51,6 +49,6 @@
 </head>
 <body>
   <video id="video" autoplay playsinline muted></video>
-  <p id="result">📷 QRコードをかざしてください</p>
+  <p id="result">📷 QRコードをカメラにかざしてください</p>
 </body>
 </html>
