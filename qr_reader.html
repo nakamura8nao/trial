@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QRコード読み取り</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    video {
+      width: 100vw;
+      height: auto;
+      max-height: 100vh;
+      object-fit: cover;
+    }
+
+    p {
+      margin: 1em;
+      font-size: 1.2em;
+      text-align: center;
+    }
+  </style>
   <script type="module">
-    import { BrowserQRCodeReader } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@latest/+esm';
+    import { BrowserQRCodeReader, NotFoundException } from 'https://cdn.jsdelivr.net/npm/@zxing/browser@latest/+esm';
 
     const codeReader = new BrowserQRCodeReader();
 
@@ -14,18 +40,17 @@
 
       codeReader.decodeFromVideoDevice(null, videoElement, (result, err) => {
         if (result) {
-          resultElement.textContent = `読み取り結果: ${result.getText()}`;
+          resultElement.textContent = `✅ 読み取り結果: ${result.getText()}`;
         }
-        if (err && !(err instanceof ZXing.NotFoundException)) {
-          console.error(err);
+        if (err && !(err instanceof NotFoundException)) {
+          console.error('QR読み取りエラー:', err);
         }
       });
     });
   </script>
 </head>
 <body>
-  <h1>QRコード読み取り</h1>
-  <video id="video" width="400" height="300" autoplay playsinline></video>
-  <p id="result">QRコードをカメラにかざしてください</p>
+  <video id="video" autoplay playsinline muted></video>
+  <p id="result">📷 QRコードをかざしてください</p>
 </body>
 </html>
